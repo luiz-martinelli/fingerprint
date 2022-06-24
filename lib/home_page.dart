@@ -12,13 +12,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final LocalAuthentication _localAuthentication = LocalAuthentication();
 
-  @override
-  @override
-  void initState() {
-    super.initState();
-    authenticate();
-  }
-
   authenticate() async {
     if (await _isBiometricAvailable()) {
       await _getListOfBiometricTypes();
@@ -32,34 +25,34 @@ class _HomePageState extends State<HomePage> {
 }
 
   Future<void> _getListOfBiometricTypes() async {
-    List<BiometricType> listOfBiometrics = 
-      await _localAuthentication.getAvailableBiometrics();
+     await _localAuthentication.getAvailableBiometrics();
 }
 
   Future<void> _authenticateUser() async {
     bool isAuthenticated =
       await _localAuthentication.authenticate(
     biometricOnly: true,
-    localizedReason: "Please authenticate to view your transaction overview",
+    localizedReason: "Use a digital",
   );
 
-      if (isAuthenticated) {
+      if (!isAuthenticated) return;
         Navigator.of(context).push(
           MaterialPageRoute(builder: ((context) => const DetailsPage()
         )
       )
     );
-  }
+  
 }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Autentique-se'),
+        title: const Text('Login'),
       ),
-      body: const Center(
-        child: Text("Use a digital para prosseguir"),
+      body:  Center(
+        child: ElevatedButton(onPressed: authenticate,
+          child: const Text("Entrar"))
       )
     );
   }
